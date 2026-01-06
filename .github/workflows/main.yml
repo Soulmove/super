@@ -1,0 +1,70 @@
+name: Auto AI News Brief
+
+# 触发条件：
+# 1. 每 2 小时自动运行 (cron)
+# 2. 手动点击 Run workflow 触发
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. 拉取代码
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. 设置 Python 环境
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    # 3. 安装依赖
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    # 4. 运行爬虫 (Crawl)
+    - name: Run Crawler
+      run: python crawl.py
+
+    # 5. 运行 AI 编辑 (Editor) - 需要 Secrets
+    - name: Run AI Editor
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        KEY_FINANCE: ${{ secrets.KEY_FINANCE }}
+        KEY_TECH: ${{ secrets.KEY_TECH }}
+        KEY_GLOBAL: ${{ secrets.KEY_GLOBAL }}
+        KEY_GENERAL: ${{ secrets.KEY_GENERAL }}
+      run: python ai_editor.py
+
+    # 6. 运行 AI 评论 (Comments) - 需要 Secrets
+    - name: Run AI Comments
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        KEY_1: ${{ secrets.KEY_1 }}
+        KEY_2: ${{ secrets.KEY_2 }}
+        KEY_3: ${{ secrets.KEY_3 }}
+        KEY_4: ${{ secrets.KEY_4 }}
+      run: python ai_comments.py
+
+    # 7. 运行 Sovereign 董事会 (Boardroom) - 需要 Secrets
+    - name: Run Sovereign Boardroom
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        KEY_FINANCE: ${{ secrets.KEY_FINANCE }}
+        KEY_TECH: ${{ secrets.KEY_TECH }}
+      run: python ai_boardroom.py
+
+    # 8. 提交并推送到 GitHub (Commit & Push)
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data_*.json analysis_*.json comments_*.json history/ reports/ history_index.json
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update AI Intelligence [skip ci]" && git push)
