@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sovereign Intelligence | 幕后操盘手</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@700&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['"Noto Serif SC"', 'serif'],
+                        cyber: ['Orbitron', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-neon': 'pulse-neon 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { background-color: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; }
+        .dark body { background-color: #0f172a; color: #f1f5f9; }
+        [v-cloak] { display: none; }
+        .thin-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .thin-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 9999px; }
+        .dark .thin-scrollbar::-webkit-scrollbar-thumb { background-color: #334155; }
+        
+        /* Markdown Styles */
+        .prose { max-width: none; }
+        .prose h1 { margin-bottom: 0.5em; font-family: 'Orbitron', sans-serif; background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .prose h2 { margin-top: 1.5em; margin-bottom: 0.8em; padding-bottom: 0.3em; border-bottom: 1px solid #e2e8f0; font-family: 'Noto Serif SC', serif; }
+        .dark .prose h2 { border-color: #1e293b; }
+        .prose h3 { margin-top: 1.2em; margin-bottom: 0.6em; color: #0f172a; font-weight: 700; }
+        .dark .prose h3 { color: #f1f5f9; }
+        .prose blockquote { border-left: 4px solid #3b82f6; background-color: rgba(59, 130, 246, 0.1); padding: 0.5em 1em; border-radius: 0 8px 8px 0; font-style: normal; }
+        .prose strong { color: #0f172a; font-weight: 700; }
+        .dark .prose strong { color: #f8fafc; }
+        .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+        .prose li { margin-bottom: 0.3em; }
+        /* Simulation of Boardroom Dialogue */
+        .prose li strong { color: #8b5cf6; } /* Highlight Personas */
+    </style>
+</head>
+<body class="h-full flex overflow-hidden selection:bg-indigo-500 selection:text-white">
+
+<div id="app" v-cloak class="flex w-full h-full relative transition-colors duration-300">
+
+    <!-- Mobile Menu Overlay -->
+    <div v-if="isMobileMenuOpen" @click="isMobileMenuOpen = false" class="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Sidebar -->
+    <aside :class="['fixed md:static inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out flex flex-col border-r shadow-2xl md:shadow-none', 
+        isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-800']">
+        
+        <div class="p-6 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xl text-white shadow-lg">
+                    <i class="fa-solid fa-chess-king"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight font-cyber">Sovereign</h1>
+                    <p class="text-[10px] opacity-60 uppercase tracking-wider">Strategic Intelligence</p>
+                </div>
+            </div>
+            <button @click="isMobileMenuOpen = false" class="md:hidden opacity-60 hover:opacity-100">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-2 py-4">
+            <div class="text-xs font-bold uppercase tracking-wider opacity-50 mb-3 px-2">决策核心</div>
+            
+            <button @click="switchView('boardroom')" :class="navBtnClass('boardroom')">
+                <i class="fa-solid fa-gavel w-5 opacity-70"></i> 董事会裁决 (Boardroom)
+            </button>
+            <button @click="switchView('raw')" :class="navBtnClass('raw')">
+                <i class="fa-solid fa-tower-broadcast w-5 opacity-70"></i> 原始情报网 (Raw)
+            </button>
+            
+            <div class="my-4 border-t opacity-20"></div>
+            
+            <button @click="switchView('about')" :class="navBtnClass('about')">
+                <i class="fa-solid fa-circle-question w-5 opacity-70"></i> 系统说明
+            </button>
+        </nav>
+        
+        <div class="p-4 border-t opacity-20">
+            <button @click="toggleDarkMode" class="w-full flex items-center justify-center gap-2 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                <i :class="['fa-solid', isDarkMode ? 'fa-sun' : 'fa-moon']"></i>
+                <span class="text-sm">{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main :class="['flex-1 flex flex-col h-full overflow-hidden relative transition-colors duration-300 w-full', isDarkMode ? 'bg-slate-950' : 'bg-slate-50']">
+        
+        <!-- Header -->
+        <header :class="['h-16 shrink-0 border-b flex items-center justify-between px-4 md:px-8 backdrop-blur-md z-10', 
+            isDarkMode ? 'bg-slate-900/80 border-slate-800 text-slate-100' : 'bg-white/80 border-slate-200 text-slate-800']">
+            
+            <div class="flex items-center gap-4">
+                <button @click="isMobileMenuOpen = true" class="md:hidden opacity-70 hover:opacity-100">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+
+                <h2 class="text-lg md:text-xl font-bold flex items-center gap-2 transition-colors duration-300">
+                    <template v-if="currentView === 'boardroom'">
+                        <i :class="['fa-solid', currentSectorIcon, 'text-indigo-500']"></i>
+                        <span>{{ currentSectorName }}战略报告</span>
+                    </template>
+                    <template v-else-if="currentView === 'raw'">
+                        <i class="fa-solid fa-radar text-blue-500"></i> 全网原始信号流
+                    </template>
+                    <template v-else>
+                        <i class="fa-solid fa-info-circle text-gray-500"></i> 关于系统
+                    </template>
+                </h2>
+            </div>
+
+            <!-- Date Picker & Status -->
+            <div class="flex items-center gap-3">
+                <div class="relative group">
+                    <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/10 hover:bg-black/10 transition-colors text-sm font-medium">
+                        <i class="fa-regular fa-calendar"></i>
+                        <span>{{ currentDateLabel }}</span>
+                        <i class="fa-solid fa-chevron-down text-xs opacity-50"></i>
+                    </button>
+                    <!-- Date Dropdown -->
+                    <div class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden hidden group-hover:block z-50">
+                        <div class="max-h-64 overflow-y-auto thin-scrollbar">
+                            <button @click="selectDate('latest')" :class="['w-full text-left px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700', selectedDate === 'latest' ? 'text-indigo-500 font-bold' : '']">
+                                🚀 最新 (Latest)
+                            </button>
+                            <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
+                            <button v-for="date in historyDates" :key="date" @click="selectDate(date)" :class="['w-full text-left px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700', selectedDate === date ? 'text-indigo-500 font-bold' : '']">
+                                📅 {{ date }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- View: Boardroom (Markdown/Reports) -->
+        <div v-if="currentView === 'boardroom'" class="flex-1 flex flex-col overflow-hidden">
+            <!-- Sector Tabs -->
+            <div :class="['shrink-0 px-4 md:px-8 flex gap-6 border-b text-sm font-medium overflow-x-auto hide-scrollbar', isDarkMode ? 'border-slate-800 bg-slate-900/50' : 'border-slate-200 bg-white/50']">
+                <button v-for="tab in sectors" :key="tab.id" @click="currentSector = tab.id" 
+                    :class="['py-3 relative flex items-center gap-2 transition-all whitespace-nowrap', 
+                    currentSector === tab.id ? 'text-indigo-600 dark:text-indigo-400 font-bold' : 'opacity-60 hover:opacity-100']">
+                    <i :class="['fa-solid', tab.icon]"></i> {{ tab.name }}
+                    <span v-if="currentSector === tab.id" class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-500 rounded-full"></span>
+                </button>
+            </div>
+
+            <!-- Report Content -->
+            <div class="flex-1 overflow-y-auto p-4 md:p-8 thin-scrollbar relative">
+                <div v-if="reportLoading" class="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-slate-950/50 z-20 backdrop-blur-sm">
+                    <div class="text-center">
+                        <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-500 mb-2"></i>
+                        <p class="text-sm font-mono opacity-70">Accessing Secure Archive...</p>
+                    </div>
+                </div>
+
+                <div v-if="reportContent" class="max-w-4xl mx-auto bg-white dark:bg-slate-900 p-8 md:p-12 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 min-h-[600px]">
+                    <!-- Report Header Decoration -->
+                    <div class="flex justify-between items-start mb-8 border-b-2 border-slate-900 dark:border-white pb-4">
+                        <div>
+                            <span class="inline-block px-2 py-1 bg-red-600 text-white text-xs font-bold uppercase tracking-widest mb-2">Top Secret</span>
+                            <h1 class="text-3xl font-bold font-serif">BOARDROOM STRATEGY REPORT</h1>
+                        </div>
+                        <div class="text-right opacity-50 font-mono text-xs">
+                            <p>REF: {{ currentSector.toUpperCase() }}-{{ selectedDate === 'latest' ? 'LIVE' : selectedDate }}</p>
+                            <p>AUTH: SOVEREIGN-AI</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Markdown Content -->
+                    <div class="prose dark:prose-invert max-w-none font-serif leading-relaxed" v-html="renderMarkdown(reportContent)"></div>
+                    
+                    <!-- Footer Seal -->
+                    <div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+                        <div class="w-32 h-32 border-4 border-red-800/20 rounded-full flex items-center justify-center rotate-[-15deg] opacity-50">
+                            <div class="text-center text-red-800/40 font-bold uppercase text-xs">
+                                <i class="fa-solid fa-stamp text-4xl mb-1 block"></i>
+                                Sovereign<br>Approved
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-else-if="!reportLoading" class="flex flex-col items-center justify-center h-full opacity-50">
+                    <i class="fa-regular fa-folder-open text-6xl mb-4"></i>
+                    <p>尚无该日期的版块分析报告</p>
+                    <p class="text-xs mt-2">No intelligence data found for {{ currentSector }} on {{ selectedDate }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- View: Raw Data (Simplified preservation of old view) -->
+        <div v-if="currentView === 'raw'" class="flex-1 flex flex-col p-4 overflow-hidden">
+            <div class="bg-white dark:bg-slate-900 rounded-xl shadow border border-slate-200 dark:border-slate-800 flex-1 flex flex-col overflow-hidden">
+                <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                    <h3 class="font-bold">Raw Signal Intercept</h3>
+                    <div class="text-xs font-mono opacity-50">Monitoring {{ rawDataCount }} sources</div>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4 thin-scrollbar">
+                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div v-for="platform in rawDataList" :key="platform.id" class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <h4 class="font-bold text-sm mb-2 flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-green-500"></span> {{ platform.id }}
+                            </h4>
+                            <ul class="space-y-2">
+                                <li v-for="(item, idx) in platform.items.slice(0, 5)" :key="idx" class="text-xs truncate opacity-80 hover:opacity-100">
+                                    <a :href="item.url" target="_blank" class="hover:text-blue-500">
+                                        <i class="fa-solid fa-caret-right text-[10px] mr-1 opacity-50"></i> {{ item.title }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View: About -->
+        <div v-if="currentView === 'about'" class="flex-1 p-8 overflow-y-auto">
+            <div class="max-w-2xl mx-auto text-center space-y-6">
+                <i class="fa-solid fa-chess-king text-6xl text-indigo-500"></i>
+                <h1 class="text-4xl font-bold font-cyber">Project Sovereign</h1>
+                <p class="text-lg opacity-70">"The world is a stage. We just watch from the box seats."</p>
+                <div class="text-left bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 text-sm leading-loose">
+                    <p><strong>核心架构：</strong> 这是一个基于“虚拟董事会”理论的 AI 战略情报系统。</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-2">
+                        <li><strong>Level 1 信号层：</strong> 实时抓取全网热搜，过滤噪音。</li>
+                        <li><strong>Level 2 辩论层：</strong> 12 个 AI 分身（从马基雅维利到第一性原理）针对信号进行激辩。</li>
+                        <li><strong>Level 3 裁决层：</strong> "Sovereign" 董事长综合各方观点，输出最终战略裁决。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    const { createApp, ref, computed, onMounted, watch } = Vue;
+
+    createApp({
+        setup() {
+            const isDarkMode = ref(true);
+            const isMobileMenuOpen = ref(false);
+            const currentView = ref('boardroom');
+            const currentSector = ref('finance');
+            const selectedDate = ref('latest');
+            const historyDates = ref([]);
+            
+            const reportContent = ref(null);
+            const reportLoading = ref(false);
+            const rawDataList = ref([]);
+            
+            const sectors = [
+                { id: 'finance', name: 'Finance (财经)', icon: 'fa-coins' },
+                { id: 'tech', name: 'Tech (科技)', icon: 'fa-microchip' },
+                { id: 'global', name: 'Global (国际)', icon: 'fa-globe' },
+                { id: 'general', name: 'General (综合)', icon: 'fa-fire' }
+            ];
+
+            const currentSectorName = computed(() => sectors.find(s => s.id === currentSector.value)?.name);
+            const currentSectorIcon = computed(() => sectors.find(s => s.id === currentSector.value)?.icon);
+            const currentDateLabel = computed(() => selectedDate.value === 'latest' ? 'Latest (最新)' : selectedDate.value);
+            const rawDataCount = computed(() => rawDataList.value.length);
+
+            const toggleDarkMode = () => {
+                isDarkMode.value = !isDarkMode.value;
+                document.documentElement.classList.toggle('dark', isDarkMode.value);
+            };
+
+            const switchView = (view) => {
+                currentView.value = view;
+                isMobileMenuOpen.value = false;
+                if (view === 'raw' && rawDataList.value.length === 0) loadRawData();
+            };
+            
+            const selectDate = (date) => {
+                selectedDate.value = date;
+                loadReport();
+            };
+
+            const navBtnClass = (view) => `w-full text-left px-4 py-3 rounded-xl flex items-center gap-4 transition-all font-medium ${currentView.value === view ? 'bg-indigo-500/10 text-indigo-500' : 'opacity-60 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/5'}`;
+
+            const renderMarkdown = (text) => {
+                if (!text) return '';
+                return marked.parse(text);
+            };
+
+            async function safeFetch(url) {
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error('Network error');
+                    return await res.json();
+                } catch (e) { console.warn(e); return null; }
+            }
+            
+            async function safeFetchText(url) {
+                 try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error('Network error');
+                    return await res.text();
+                } catch (e) { console.warn(e); return null; }
+            }
+
+            const loadHistoryIndex = async () => {
+                const data = await safeFetch('./history_index.json');
+                if (data && data.dates) {
+                    historyDates.value = data.dates;
+                }
+            };
+
+            const loadReport = async () => {
+                if (currentView.value !== 'boardroom') return;
+                
+                reportLoading.value = true;
+                reportContent.value = null;
+                
+                try {
+                    let url = '';
+                    if (selectedDate.value === 'latest') {
+                        // Try root level strategy file
+                        url = `./strategy_${currentSector.value}.md?t=${Date.now()}`;
+                    } else {
+                        // Try history folder
+                        url = `./history/${selectedDate.value}/reports/${currentSector.value}_strategy.md`;
+                    }
+                    
+                    const text = await safeFetchText(url);
+                    if (text && !text.includes('<!DOCTYPE html>')) { // Avoid 404 HTML pages
+                        reportContent.value = text;
+                    }
+                } finally {
+                    reportLoading.value = false;
+                }
+            };
+            
+            const loadRawData = async () => {
+                // Load one for demo, or all if feasible. 
+                // For simplicity, let's just load finance to show valid connection
+                const data = await safeFetch('./data_finance.json');
+                if (Array.isArray(data)) rawDataList.value = data;
+                else {
+                    // Try to load all roughly
+                    // Omitted for brevity in this specific update, keeping it light
+                }
+            };
+
+            watch([currentSector, selectedDate, currentView], () => {
+                if(currentView.value === 'boardroom') loadReport();
+            });
+
+            onMounted(() => {
+                document.documentElement.classList.toggle('dark', isDarkMode.value);
+                loadHistoryIndex();
+                loadReport();
+            });
+
+            return {
+                isDarkMode, isMobileMenuOpen, currentView, currentSector, selectedDate,
+                sectors, historyDates, reportContent, reportLoading, rawDataList,
+                currentSectorName, currentSectorIcon, currentDateLabel, rawDataCount,
+                toggleDarkMode, switchView, navBtnClass, selectDate, renderMarkdown
+            }
+        }
+    }).mount('#app')
+</script>
+</body>
+</html>

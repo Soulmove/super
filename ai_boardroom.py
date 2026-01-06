@@ -1,0 +1,173 @@
+import os
+import json
+import time
+from datetime import datetime
+from google import genai
+from google.genai import types
+
+import archive_manager
+from personas_config import SYSTEM_PROMPT_SOVEREIGN
+
+# ================= 🔧 配置区域 =================
+if os.environ.get("GITHUB_ACTIONS"):
+    print("☁️ 检测到云端环境：禁用代理，使用直连...")
+else:
+    print("🏠 检测到本地环境：启用代理 17890...")
+    PROXY_PORT = "17890"
+    os.environ["HTTP_PROXY"] = f"http://127.0.0.1:{PROXY_PORT}"
+    os.environ["HTTPS_PROXY"] = f"http://127.0.0.1:{PROXY_PORT}"
+
+MODEL_NAME = "gemini-2.0-flash-exp" # 使用性能较好的模型
+
+FILES_CONFIG = {
+    "finance": { "in": "data_finance.json", "name": "财经/市场", "key_env": "KEY_FINANCE" },
+    "global": { "in": "data_global.json",  "name": "国际/宏观", "key_env": "KEY_GLOBAL" },
+    "tech": { "in": "data_tech.json",    "name": "科技/AI",   "key_env": "KEY_TECH" },
+    "general": { "in": "data_general.json", "name": "综合/娱乐", "key_env": "KEY_GENERAL" }
+}
+
+def get_client(key_env):
+    # Try the specific key first
+    api_key = os.environ.get(key_env)
+    
+    # If not found, try a list of common keys
+    if not api_key:
+        possible_keys = ["GOOGLE_API_KEY", "KEY_1", "KEY_2", "KEY_3", "KEY_4", "KEY_5", "KEY_6", "KEY_7", "KEY_8"]
+        for k in possible_keys:
+            val = os.environ.get(k)
+            if val:
+                api_key = val
+                break
+    
+    
+    if not api_key:
+        return None
+    return genai.Client(api_key=api_key, http_options={'api_version': 'v1alpha'})
+
+def load_data_titles(filepath, limit=100):
+    if not os.path.exists(filepath): return []
+    with open(filepath, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    titles = []
+    count = 0
+    for platform in data:
+        items = platform.get('items', [])
+        for item in items:
+            title = item.get('title', '').strip()
+            if title:
+                titles.append(f"- {title}")
+                count += 1
+            if count >= limit: break
+    return titles
+
+def generate_boardroom_report(sector_name, titles):
+    client = get_client(FILES_CONFIG.get(sector_name, {}).get("key_env", "GOOGLE_API_KEY"))
+    if not client:
+        print(f"❌ No API Key for {sector_name}")
+        return None
+
+    # Construct the Task Prompt
+    # We ask the model to analyze the whole list, pick top signals, debating them, and outputting the report.
+    
+    news_feed = "\n".join(titles)
+    
+    prompt = f"""
+    {SYSTEM_PROMPT_SOVEREIGN}
+
+    ---
+    **当前任务 (Mission)**
+    你现在正在主持【{sector_name}】板块的董事会战略分析会议。
+    日期: {datetime.now().strftime("%Y-%m-%d")}
+
+    **输入情报 (Incoming Intel)**:
+    {news_feed}
+
+    **执行指令**:
+    1.  **Step 1: 信号筛选**: 从上述情报中，筛选出 **Top 5** 最具战略价值、最值得讨论的“关键信号”（可以将相似新闻合并）。
+    2.  **Step 2: 董事会辩论**: 针对每个关键信号，激活 3-4 个分身进行犀利点评。
+    3.  **Step 3: 董事长裁决**: 针对每个信号给出最终裁决。
+    4.  **Step 4: 生成报告**: 将结果汇总为一份 **Markdown 格式** 的战略报告。
+
+    **输出格式要求 (Markdown)**:
+    报告标题必须是：`# 🏛️ Sovereign 战略裁决报告：{sector_name}分部`
+    
+    结构如下：
+    
+    # 🏛️ Sovereign 战略裁决报告：{sector_name}分部
+    > 📅 日期：YYYY-MM-DD | 🧠 核心模型：Sovereign-v1 | 🛡️ 密级：机密
+
+    ## 🚨 Alpha Signals (关键信号裁决)
+
+    ### 1. [信号标题]
+    **💬 董事会激辩**
+    *   **[分身A]**：观点...
+    *   **[分身B]**：观点...
+    
+    **👨‍⚖️ 董事长裁决 (The Verdict)**
+    *   **👁️ 真相层**：...
+    *   **⏳ 时间差**：...
+    *   **⚔️ 行动建议**：
+        *   🔴 **激进 (High Risk)**：...
+        *   🔵 **保守 (Low Risk)**：...
+
+    (重复 1-5 个信号...)
+
+    ---
+    ## 📉 风险与黑天鹅预警
+    *   ...
+
+    ## 📝 董事长最终结语
+    (一段话总结今天的市场/局势，充满哲理和洞察力)
+    """
+
+    try:
+        print(f"🧠 {sector_name}: 正在召开董事会会议 (AI Generating)...")
+        response = client.models.generate_content(
+            model=MODEL_NAME,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=1.0, # High creativity for debate
+            )
+        )
+        return response.text
+    except Exception as e:
+        print(f"❌ Error generating report for {sector_name}: {e}")
+        return None
+
+def run_boardroom():
+    print("🚀 Sovereign AI Boardroom 启动...")
+    archive_manager.init_dirs()
+    
+    # 1. Archive Raw Data first
+    raw_files = [cfg['in'] for cfg in FILES_CONFIG.values()]
+    archive_manager.archive_daily_data(raw_files)
+    
+    # 2. Process each sector
+    for key, config in FILES_CONFIG.items():
+        titles = load_data_titles(config['in'])
+        if not titles:
+            print(f"⚠️ Skip {key}: No data found.")
+            continue
+            
+        report_content = generate_boardroom_report(key, titles)
+        if report_content:
+            # Clean up markdown code blocks if present
+            if report_content.startswith("```markdown"):
+                report_content = report_content.replace("```markdown", "", 1)
+            if report_content.startswith("```"):
+                report_content = report_content.replace("```", "", 1)
+            if report_content.endswith("```"):
+                report_content = report_content[:-3]
+                
+            report_path = archive_manager.save_report(key, report_content)
+            print(f"✅ Report saved: {report_path}")
+            
+        time.sleep(5) # Avoid rate limits
+
+    # 3. Update History Index for Frontend
+    archive_manager.update_history_index()
+    print("📅 History index updated.")
+
+if __name__ == "__main__":
+    run_boardroom()
