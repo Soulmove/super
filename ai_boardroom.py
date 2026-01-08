@@ -72,77 +72,55 @@ def generate_boardroom_report(sector_name, titles):
     """
     召唤董事会 AI 进行激辩并生成战略裁决报告
     """
-    client = get_client(FILES_CONFIG.get(sector_name, {}).get("key_env", "GOOGLE_API_KEY"))
-    if not client:
-        print(f"❌ 找不到用于 {sector_name} 板块的 API Key")
+    # --- 🧠 智能重试机制 ---
+    # 定义 Key 池：优先使用专属 Key，失败则轮询通用 Key 池
+    primary_key_env = FILES_CONFIG.get(sector_name, {}).get("key_env")
+    primary_key = os.environ.get(primary_key_env) if primary_key_env else None
+    
+    # 构建所有可用 Key 的列表
+    candidate_keys = []
+    if primary_key: candidate_keys.append(primary_key)
+    candidate_keys.append(os.environ.get("GOOGLE_API_KEY"))
+    for i in range(1, 9):
+        k = os.environ.get(f"KEY_{i}")
+        if k: candidate_keys.append(k)
+        
+    # 去重并过滤空值
+    candidate_keys = list(set([k for k in candidate_keys if k]))
+    
+    if not candidate_keys:
+        print(f"❌ 找不到用于 {sector_name} 的任何 API Key")
         return None
 
-    # 构建任务提示词 (Prompt)
-    # 我们要求模型分析整个新闻流，选出核心信号，进行分身辩论，最后由董事长给出裁决
-    news_feed = "\n".join(titles)
-    
-    prompt = f"""
-    {SYSTEM_PROMPT_SOVEREIGN}
-
-    ---
-    **当前任务 (Mission)**
-    你现在正在主持【{sector_name}】板块的董事会战略分析会议。
-    日期: {datetime.now().strftime("%Y-%m-%d")}
-
-    **输入情报 (Incoming Intel)**:
-    {news_feed}
-
-    **执行指令**:
-    1.  **Step 1: 信号筛选**: 从上述情报中，筛选出 **Top 5** 最具战略价值、最值得讨论的“关键信号”（可以将相似新闻合并）。
-    2.  **Step 2: 董事会辩论**: 针对每个关键信号，激活 3-4 个分身进行犀利点评。
-    3.  **Step 3: 董事长裁决**: 针对每个信号给出最终裁决。
-    4.  **Step 4: 生成报告**: 将结果汇总为一份 **Markdown 格式** 的战略报告。
-
-    **输出格式要求 (Markdown)**:
-    报告标题必须是：`# 🏛️ Sovereign 战略裁决报告：{sector_name}分部`
-    
-    结构如下：
-    
-    # 🏛️ Sovereign 战略裁决报告：{sector_name}分部
-    > 📅 日期：YYYY-MM-DD | 🧠 核心模型：Sovereign-v1 | 🛡️ 密级：机密
-
-    ## 🚨 Alpha Signals (关键信号裁决)
-
-    ### 1. [信号标题]
-    **💬 董事会激辩**
-    *   **[分身A]**：观点...
-    *   **[分身B]**：观点...
-    
-    **👨‍⚖️ 董事长裁决 (The Verdict)**
-    *   **👁️ 真相层**：...
-    *   **⏳ 时间差**：...
-    *   **⚔️ 行动建议**：
-        *   🔴 **激进 (High Risk)**：...
-        *   🔵 **保守 (Low Risk)**：...
-
-    (重复 1-5 个信号...)
-
-    ---
-    ## 📉 风险与黑天鹅预警
-    *   ...
-
-    ## 📝 董事长最终结语
-    (一段话总结今天的市场/局势，充满哲理和洞察力)
-    """
-
-    try:
-        print(f"🧠 {sector_name}: 正在召开虚拟董事会会议 (AI 生成中)...")
-        response = client.models.generate_content(
-            model=MODEL_NAME,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=1.0, # 保持较高的随机性以确保辩论的精彩程度
+    # 开始尝试
+    for attempt, api_key in enumerate(candidate_keys):
+        try:
+            print(f"🧠 {sector_name}: 正在尝试 Key [{attempt+1}/{len(candidate_keys)}] (AI 生成中)...")
+            
+            client = genai.Client(api_key=api_key, http_options={'api_version': 'v1alpha'})
+            
+            response = client.models.generate_content(
+                model=MODEL_NAME,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=1.0, 
+                )
             )
-        )
-        return response.text
-    except Exception as e:
-        print(f"❌ 生成 {sector_name} 报告时发生错误: {e}")
-        return None
+            return response.text
+            
+        except Exception as e:
+            error_str = str(e)
+            if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str:
+                print(f"⚠️ Key [{attempt+1}] 额度耗尽 (429)，正在切换下一个...")
+                time.sleep(2) # 稍微冷却切换
+                continue
+            else:
+                # 其他错误直接抛出
+                print(f"❌ 生成 {sector_name} 报告时发生非 429 错误: {e}")
+                return None
+    
+    print(f"❌ {sector_name}: 所有可用 Key ({len(candidate_keys)} 个) 均已耗尽额度或失败。")
+    return None
 
 def run_boardroom():
     """
