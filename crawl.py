@@ -135,7 +135,13 @@ if __name__ == "__main__":
     print(f"🤖 分类爬虫已启动！")
     print(f"数据将分别保存为: {', '.join(FILES.values())}")
     
-    while True:
+    
+    # Github Actions 环境下只运行一次
+    if os.environ.get("GITHUB_ACTIONS"):
         run_spider()
-        print(f"😴 休息 {INTERVAL} 秒...")
-        time.sleep(INTERVAL)
+        print("⚡ GitHub Action 环境：单次运行结束。")
+    else:
+        while True:
+            run_spider()
+            print(f"😴 休息 {INTERVAL} 秒...")
+            time.sleep(INTERVAL)
