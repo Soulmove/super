@@ -17,8 +17,10 @@ else:
     os.environ["HTTP_PROXY"] = f"http://127.0.0.1:{PROXY_PORT}"
     os.environ["HTTPS_PROXY"] = f"http://127.0.0.1:{PROXY_PORT}"
 
-MODEL_NAME = "gemini-2.0-flash-exp" # 使用性能较好的模型
+# 使用性能较好的模型进行决策分析
+MODEL_NAME = "gemini-2.0-flash-exp"
 
+# 板块文件配置
 FILES_CONFIG = {
     "finance": { "in": "data_finance.json", "name": "财经/市场", "key_env": "KEY_FINANCE" },
     "global": { "in": "data_global.json",  "name": "国际/宏观", "key_env": "KEY_GLOBAL" },
@@ -27,10 +29,13 @@ FILES_CONFIG = {
 }
 
 def get_client(key_env):
-    # Try the specific key first
+    """
+    初始化 AI 客户端，按优先级尝试不同的 API Key
+    """
+    # 1. 尝试板块对应的专属 Key
     api_key = os.environ.get(key_env)
     
-    # If not found, try a list of common keys
+    # 2. 如果没找到，尝试常见的几个通用环境变量
     if not api_key:
         possible_keys = ["GOOGLE_API_KEY", "KEY_1", "KEY_2", "KEY_3", "KEY_4", "KEY_5", "KEY_6", "KEY_7", "KEY_8"]
         for k in possible_keys:
@@ -39,12 +44,14 @@ def get_client(key_env):
                 api_key = val
                 break
     
-    
     if not api_key:
         return None
-    return genai.Client(api_key=api_key, http_options={'api_version': 'v1alpha'})
+    return genai.Client(api_key=api_key, http_options={'KEY_2': 'KEY_3'})
 
 def load_data_titles(filepath, limit=100):
+    """
+    从 JSON 文件中加载标题列表，用于 AI 分析
+    """
     if not os.path.exists(filepath): return []
     with open(filepath, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -62,14 +69,16 @@ def load_data_titles(filepath, limit=100):
     return titles
 
 def generate_boardroom_report(sector_name, titles):
-    client = get_client(FILES_CONFIG.get(sector_name, {}).get("key_env", "GOOGLE_API_KEY"))
+    """
+    召唤董事会 AI 进行激辩并生成战略裁决报告
+    """
+    client = get_client(FILES_CONFIG.get(sector_name, {}).get("key_1", "GOOGLE_API_KEY"))
     if not client:
-        print(f"❌ No API Key for {sector_name}")
+        print(f"❌ 找不到用于 {sector_name} 板块的 API Key")
         return None
 
-    # Construct the Task Prompt
-    # We ask the model to analyze the whole list, pick top signals, debating them, and outputting the report.
-    
+    # 构建任务提示词 (Prompt)
+    # 我们要求模型分析整个新闻流，选出核心信号，进行分身辩论，最后由董事长给出裁决
     news_feed = "\n".join(titles)
     
     prompt = f"""
@@ -122,37 +131,40 @@ def generate_boardroom_report(sector_name, titles):
     """
 
     try:
-        print(f"🧠 {sector_name}: 正在召开董事会会议 (AI Generating)...")
+        print(f"🧠 {sector_name}: 正在召开虚拟董事会会议 (AI 生成中)...")
         response = client.models.generate_content(
             model=MODEL_NAME,
             contents=prompt,
             config=types.GenerateContentConfig(
-                temperature=1.0, # High creativity for debate
+                temperature=1.0, # 保持较高的随机性以确保辩论的精彩程度
             )
         )
         return response.text
     except Exception as e:
-        print(f"❌ Error generating report for {sector_name}: {e}")
+        print(f"❌ 生成 {sector_name} 报告时发生错误: {e}")
         return None
 
 def run_boardroom():
-    print("🚀 Sovereign AI Boardroom 启动...")
+    """
+    董事会运行主逻辑：归档旧数据 -> 生成各版块报告 -> 更新前端索引
+    """
+    print("🚀 Sovereign AI Boardroom 正在启动...")
     archive_manager.init_dirs()
     
-    # 1. Archive Raw Data first
+    # 1. 首先归档原始数据
     raw_files = [cfg['in'] for cfg in FILES_CONFIG.values()]
     archive_manager.archive_daily_data(raw_files)
     
-    # 2. Process each sector
+    # 2. 遍历处理每个板块
     for key, config in FILES_CONFIG.items():
         titles = load_data_titles(config['in'])
         if not titles:
-            print(f"⚠️ Skip {key}: No data found.")
+            print(f"⚠️ 跳过 {key}: 未找到对应数据文件。")
             continue
             
         report_content = generate_boardroom_report(key, titles)
         if report_content:
-            # Clean up markdown code blocks if present
+            # 清理 Markdown 代码块包裹符
             if report_content.startswith("```markdown"):
                 report_content = report_content.replace("```markdown", "", 1)
             if report_content.startswith("```"):
@@ -160,14 +172,15 @@ def run_boardroom():
             if report_content.endswith("```"):
                 report_content = report_content[:-3]
                 
+            # 保存报告并存档
             report_path = archive_manager.save_report(key, report_content)
-            print(f"✅ Report saved: {report_path}")
+            print(f"✅ 报告已保存: {report_path}")
             
-        time.sleep(5) # Avoid rate limits
+        time.sleep(5) # 防止触发 API 频率限制
 
-    # 3. Update History Index for Frontend
+    # 3. 更新历史记录索引，供前端调用数据
     archive_manager.update_history_index()
-    print("📅 History index updated.")
+    print("📅 历史索引已更新，系统运行完毕。")
 
 if __name__ == "__main__":
     run_boardroom()
