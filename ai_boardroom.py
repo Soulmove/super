@@ -46,7 +46,7 @@ def get_client(key_env):
     
     if not api_key:
         return None
-    return genai.Client(api_key=api_key, http_options={'KEY_2': 'KEY_3'})
+    return genai.Client(api_key=api_key, http_options={'api_version': 'v1alpha'})
 
 def load_data_titles(filepath, limit=100):
     """
@@ -72,7 +72,7 @@ def generate_boardroom_report(sector_name, titles):
     """
     召唤董事会 AI 进行激辩并生成战略裁决报告
     """
-    client = get_client(FILES_CONFIG.get(sector_name, {}).get("key_1", "GOOGLE_API_KEY"))
+    client = get_client(FILES_CONFIG.get(sector_name, {}).get("key_env", "GOOGLE_API_KEY"))
     if not client:
         print(f"❌ 找不到用于 {sector_name} 板块的 API Key")
         return None
