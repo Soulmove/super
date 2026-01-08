@@ -1,0 +1,43 @@
+name: 03-AI Comments
+
+on:
+  schedule:
+    - cron: '20 */2 * * *' # 每2小时的第20分钟运行 (00:20, 02:20...)
+  workflow_dispatch:
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Run AI Comments
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        KEY_1: ${{ secrets.KEY_1 }}
+        KEY_2: ${{ secrets.KEY_2 }}
+        KEY_3: ${{ secrets.KEY_3 }}
+        KEY_4: ${{ secrets.KEY_4 }}
+      run: python ai_comments.py
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git pull origin main # 防止冲突
+        git add comments_*.json
+        git diff --quiet && git diff --staged --quiet || (git commit -m "💬 Update AI Comments [skip ci]" && git push)

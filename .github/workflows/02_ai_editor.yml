@@ -1,0 +1,43 @@
+name: 02-AI Analysis (Editor)
+
+on:
+  schedule:
+    - cron: '10 */2 * * *' # 每2小时的第10分钟运行 (00:10, 02:10...)
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Run AI Editor
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        KEY_FINANCE: ${{ secrets.KEY_FINANCE }}
+        KEY_TECH: ${{ secrets.KEY_TECH }}
+        KEY_GLOBAL: ${{ secrets.KEY_GLOBAL }}
+        KEY_GENERAL: ${{ secrets.KEY_GENERAL }}
+      run: python ai_editor.py
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git pull origin main # 防止冲突
+        git add analysis_*.json
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🧠 Update AI Analysis [skip ci]" && git push)

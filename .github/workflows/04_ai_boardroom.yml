@@ -1,0 +1,42 @@
+name: 04-Sovereign Boardroom
+
+on:
+  schedule:
+    - cron: '30 */2 * * *' # 每2小时的第30分钟运行 (00:30, 02:30...)
+  workflow_dispatch:
+
+jobs:
+  boardroom:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Run Sovereign Boardroom
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        KEY_FINANCE: ${{ secrets.KEY_FINANCE }}
+        KEY_TECH: ${{ secrets.KEY_TECH }}
+        KEY_GLOBAL: ${{ secrets.KEY_GLOBAL }}
+      run: python ai_boardroom.py
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git pull origin main # 防止冲突
+        git add history/ reports/ history_index.json
+        git diff --quiet && git diff --staged --quiet || (git commit -m "🏛️ Sovereign Verdict & Archive [skip ci]" && git push)
