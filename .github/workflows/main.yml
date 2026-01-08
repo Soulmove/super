@@ -1,4 +1,4 @@
-name: Auto AI News Brief
+name: 🧠Auto AI News Brief
 
 # 触发条件：
 # 1. 每 2 小时自动运行 (cron)
@@ -29,9 +29,6 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    # 4. 运行爬虫 (Crawl)
-    - name: Run Crawler
-      run: python crawl.py
 
     # 5. 运行 AI 编辑 (Editor) - 需要 Secrets
     - name: Run AI Editor
