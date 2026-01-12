@@ -3,6 +3,22 @@
     "id": "zaobao",
     "items": [
       {
+        "title": "中国重启大豆拍卖 或为从美采购腾出仓储空间",
+        "url": "https://www.zaochenbao.com/news/china/202601/1262125.html"
+      },
+      {
+        "title": "习近平：反腐败是一场输不起也决不能输的重大斗争",
+        "url": "https://www.zaochenbao.com/news/china/202601/1262124.html"
+      },
+      {
+        "title": "香港高铁本月26日起新增16个站点",
+        "url": "https://www.zaochenbao.com/news/hkMacao/202601/1262123.html"
+      },
+      {
+        "title": "小鹏飞天汽车子公司传以保密形式申请港股上市",
+        "url": "https://www.zaochenbao.com/news/hkMacao/202601/1262122.html"
+      },
+      {
         "title": "中国确认外销歼-10CE战机印巴冲突期间击落多架战机",
         "url": "https://www.zaochenbao.com/news/china/202601/1262121.html"
       },
@@ -63,10 +79,6 @@
         "url": "https://www.zaochenbao.com/news/china/202601/1262107.html"
       },
       {
-        "title": "蒋万安吁赖清德效仿陈水扁 在野党领袖会面化解对立",
-        "url": "https://www.zaochenbao.com/news/china/202601/1262106.html"
-      },
-      {
         "title": "质疑北约关键时刻会否挺美 特朗普：美国需要格陵兰所有权",
         "url": "https://www.zaochenbao.com/news/politics/202601/1262105.html"
       },
@@ -91,10 +103,6 @@
         "url": "https://www.zaochenbao.com/news/politics/202601/1262100.html"
       },
       {
-        "title": "天马1000无人运输机首飞",
-        "url": "https://www.zaochenbao.com/news/china/202601/1262099.html"
-      },
-      {
         "title": "特朗普称考虑应对伊朗一系列措施包括“强硬选项”",
         "url": "https://www.zaochenbao.com/news/politics/202601/1262093.html"
       },
@@ -113,20 +121,44 @@
       {
         "title": "陈羔履新江苏省太仓市委书记",
         "url": "https://www.zaochenbao.com/news/Chronicles/202601/1262082.html"
-      },
-      {
-        "title": "万利任江苏省苏州市吴中区委书记",
-        "url": "https://www.zaochenbao.com/news/Chronicles/202601/1262081.html"
-      },
-      {
-        "title": "唐仁健组建“周末愉快”群，是以“愉快”的腐败圈子",
-        "url": "https://www.zaochenbao.com/news/Chronicles/202601/1262080.html"
       }
     ]
   },
   {
     "id": "sputniknewscn",
     "items": [
+      {
+        "title": "俄国防部：俄军解放扎波罗热州新博伊基夫斯凯村",
+        "url": "https://sputniknews.cn/20260112/1069278700.html"
+      },
+      {
+        "title": "专家：中国申请20万颗卫星频轨资源是对“星链”的回应及推进“航天强国”战略之举",
+        "url": "https://sputniknews.cn/20260112/1069278507.html"
+      },
+      {
+        "title": "媒体：律师坚称杜特尔特在被国际刑事法院羁押期间健康状况恶化并申请临时释放",
+        "url": "https://sputniknews.cn/20260112/1069278411.html"
+      },
+      {
+        "title": "巴基斯坦密切关注伊朗局势",
+        "url": "https://sputniknews.cn/20260112/1069278314.html"
+      },
+      {
+        "title": "中方发布关于中欧电动汽车案磋商进展",
+        "url": "https://sputniknews.cn/20260112/1069278209.html"
+      },
+      {
+        "title": "瑞典防长：特朗普关于格陵兰的言论给北约带来不确定性",
+        "url": "https://sputniknews.cn/20260112/1069278096.html"
+      },
+      {
+        "title": "俄专家：美国现在未必会对伊朗发起大规模行动",
+        "url": "https://sputniknews.cn/20260112/1069277947.html"
+      },
+      {
+        "title": "韩国防长：韩方愿与朝方联合调查无人机进入朝鲜事件",
+        "url": "https://sputniknews.cn/20260112/1069277849.html"
+      },
       {
         "title": "伊朗外长：伊朗政府已控制国内抗议局势",
         "url": "https://sputniknews.cn/20260112/1069277712.html"
@@ -174,38 +206,6 @@
       {
         "title": "欧盟外交与安全政策高级代表：准备提出制裁伊朗的新方案",
         "url": "https://sputniknews.cn/20260112/1069276289.html"
-      },
-      {
-        "title": "乌前外长：乌克兰公民准备就顿巴斯作出领土让步",
-        "url": "https://sputniknews.cn/20260112/1069276163.html"
-      },
-      {
-        "title": "光纤无人机成为俄军战场新优势",
-        "url": "https://sputniknews.cn/20260112/1069276049.html"
-      },
-      {
-        "title": "英国国防大臣希利在前往基辅途中遭遇“榛树”引起的空袭警报",
-        "url": "https://sputniknews.cn/20260112/1069275938.html"
-      },
-      {
-        "title": "特朗普承诺某个时机将会见委内瑞拉代总统",
-        "url": "https://sputniknews.cn/20260112/1069275826.html"
-      },
-      {
-        "title": "俄外交部：乌克兰与欧洲企图破坏所有谈判进程",
-        "url": "https://sputniknews.cn/20260112/1069275672.html"
-      },
-      {
-        "title": "印度空间研究组织：2026年首次太空发射未能成功",
-        "url": "https://sputniknews.cn/20260112/1069275556.html"
-      },
-      {
-        "title": "特朗普：格陵兰岛防务仅靠两支狗拉雪橇队",
-        "url": "https://sputniknews.cn/20260112/1069275411.html"
-      },
-      {
-        "title": "美媒：美国正研究在伊朗实施网络攻击的可能性",
-        "url": "https://sputniknews.cn/20260112/1069275267.html"
       }
     ]
   },
@@ -338,8 +338,104 @@
     "id": "kaopu",
     "items": [
       {
-        "title": "小鹏飞天汽车子公司传以保密形式提交港股IPO",
+        "title": "“前所未见技术问题”造成新山自动通关系统故障",
+        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8089720"
+      },
+      {
+        "title": "广东汕头突发山火 无人伤亡",
+        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8088260"
+      },
+      {
+        "title": "智库预测马国2026年经济增长放缓至4.5%",
+        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8088207"
+      },
+      {
+        "title": "新加坡中央医院急诊部搬家 紧邻现有急诊部",
+        "url": "https://www.zaobao.com.sg/realtime/singapore/story20260112-8089605"
+      },
+      {
+        "title": "ترامب يتمسك بضم غرينلاند ويقلل من التداعيات على الناتو",
+        "url": "https://www.aljazeera.net/news/2026/1/12/%d8%aa%d8%b1%d8%a7%d9%85%d8%a8-%d9%8a%d8%aa%d9%85%d8%b3%d9%83-%d8%a8%d8%b6%d9%85-%d8%ba%d8%b1%d9%8a%d9%86%d9%84%d8%a7%d9%86%d8%af-%d9%88%d9%8a%d9%82%d9%84%d9%84-%d9%85%d9%86"
+      },
+      {
+        "title": "马国追回300亿令吉一马资金",
+        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8085047"
+      },
+      {
+        "title": "讨论新主席人选 伊党促国盟尽快开会",
+        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8084854"
+      },
+      {
+        "title": "黎智英案求情：控方称「健康无异常及肥胖」，辩方指「多病独囚过得艰难」",
+        "url": "https://www.bbc.com/zhongwen/articles/c7v07n01l9go/simp"
+      },
+      {
+        "title": "中国重启大豆拍卖 或为从美采购腾出仓储空间",
+        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8087434"
+      },
+      {
+        "title": "习近平：反腐败是一场输不起也决不能输的重大斗争",
+        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8089436"
+      },
+      {
+        "title": "美国联邦司法部开始调查美联储主席鲍威尔",
+        "url": "https://www.dw.com/zh/美国联邦司法部开始调查美联储主席鲍威尔/a-75472808"
+      },
+      {
+        "title": "特朗普施压信用卡机构 若不降利率至10%即“违反法律”",
+        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8089259"
+      },
+      {
+        "title": "【国会】政府成立委员会 启动检讨政治职务者薪金",
+        "url": "https://www.zaobao.com.sg/realtime/singapore/story20260112-8089269"
+      },
+      {
+        "title": "克莱恩-蒙塔纳火灾：“星座”酒吧业主向遇难者致歉",
+        "url": "https://www.swissinfo.ch/chi/various/%e5%85%8b%e8%8e%b1%e6%81%a9-%e8%92%99%e5%a1%94%e7%ba%b3%e7%81%ab%e7%81%be%ef%bc%9a%e6%98%9f%e5%ba%a7%e9%85%92%e5%90%a7%e4%b8%9a%e4%b8%bb%e5%90%91%e9%81%87%e9%9a%be%e8%80%85%e8%87%b4%e6%ad%89/90760131"
+      },
+      {
+        "title": "香港高铁本月26日起新增16个站点",
+        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8088284"
+      },
+      {
+        "title": "【国会】新《医疗信息法案》规定医疗机构共享患者信息 提升看诊效率",
+        "url": "https://www.zaobao.com.sg/realtime/singapore/story20260112-8087079"
+      },
+      {
+        "title": "德国总理默茨访印度 深化安全合作助印“脱俄”",
+        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8088462"
+      },
+      {
+        "title": "特朗普重申将考虑对伊朗采取军事行动",
+        "url": "https://www3.nhk.or.jp/nhkworld/zh/news/20260112_09/"
+      },
+      {
+        "title": "特朗普政府就多地示威活动称将加强移民管控",
+        "url": "https://www3.nhk.or.jp/nhkworld/zh/news/20260112_07/"
+      },
+      {
+        "title": "泽连斯基谴责俄袭击造成多地断电是恐怖主义行径",
+        "url": "https://www3.nhk.or.jp/nhkworld/zh/news/20260112_05/"
+      },
+      {
+        "title": "2025年日本全国SFTS病例数创新高",
+        "url": "https://www3.nhk.or.jp/nhkworld/zh/news/20260112_02/"
+      },
+      {
+        "title": "教育问答 日本的初中⑥课外活动",
+        "url": "https://www3.nhk.or.jp/nhkworld/zh/news/20260112_ML04/"
+      },
+      {
+        "title": "小鹏飞天汽车子公司传以保密形式申请港股上市",
         "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8088835"
+      },
+      {
+        "title": "川普：美国「无论如何」将拿下格陵兰",
+        "url": "https://www.rfi.fr/cn/%E5%9B%BD%E9%99%85%E6%8A%A5%E9%81%93/20260112-%E5%B7%9D%E6%99%AE-%E7%BE%8E%E5%9B%BD-%E6%97%A0%E8%AE%BA%E5%A6%82%E4%BD%95-%E5%B0%86%E6%8B%BF%E4%B8%8B%E6%A0%BC%E9%99%B5%E5%85%B0"
+      },
+      {
+        "title": "亚股多收红",
+        "url": "https://www.rfi.fr/cn/%E8%B4%A2%E7%BB%8F%E5%BF%AB%E8%AE%AF/20260112-%E4%BA%9A%E8%82%A1%E5%A4%9A%E6%94%B6%E7%BA%A2"
       },
       {
         "title": "马来西亚精英大学中央空调压缩机爆炸 酿一死九伤",
@@ -350,112 +446,16 @@
         "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8088653"
       },
       {
-        "title": "中国股市单日成交额创历史新高",
-        "url": "https://cn.wsj.com/articles/chinas-daily-stock-trading-volume-hits-record-high-8238652b"
+        "title": "伊朗当局暴力对待抗议者　德总理：软弱的象徵",
+        "url": "https://www.rfi.fr/cn/%E5%9B%BD%E9%99%85%E6%8A%A5%E9%81%93/20260112-%E4%BC%8A%E6%9C%97%E5%BD%93%E5%B1%80%E6%9A%B4%E5%8A%9B%E5%AF%B9%E5%BE%85%E6%8A%97%E8%AE%AE%E8%80%85-%E5%BE%B7%E6%80%BB%E7%90%86-%E8%BD%AF%E5%BC%B1%E7%9A%84%E8%B1%A1%E5%BE%B5"
+      },
+      {
+        "title": "监测单位：伊朗断网已超过84小时",
+        "url": "https://www.rfi.fr/cn/%E5%9B%BD%E9%99%85%E6%8A%A5%E9%81%93/20260112-%E7%9B%91%E6%B5%8B%E5%8D%95%E4%BD%8D-%E4%BC%8A%E6%9C%97%E6%96%AD%E7%BD%91%E5%B7%B2%E8%B6%85%E8%BF%8784%E5%B0%8F%E6%97%B6"
       },
       {
         "title": "中欧就电动汽车关税达成协议",
         "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8088579"
-      },
-      {
-        "title": "安全局势受控 泰国军方取消那拉提瓦府宵禁",
-        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8088528"
-      },
-      {
-        "title": "美印关系现转机 美新驻印大使承诺解决贸易分歧",
-        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8088372"
-      },
-      {
-        "title": "台北议员陈怡君涉贪454万新台币 被重判入狱七年10月",
-        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8088014"
-      },
-      {
-        "title": "“杭州六小龙”之一强脑科技据报已提交香港上市申请",
-        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8088325"
-      },
-      {
-        "title": "2025年瑞士房价持续上涨",
-        "url": "https://www.swissinfo.ch/chi/various/2025%e5%b9%b4%e7%91%9e%e5%a3%ab%e6%88%bf%e4%bb%b7%e6%8c%81%e7%bb%ad%e4%b8%8a%e6%b6%a8/90750387"
-      },
-      {
-        "title": "227项行政命令……特朗普“搅动”之下的2025年美国生存图景",
-        "url": "http://china.hani.co.kr/arti/international/16366.html"
-      },
-      {
-        "title": "乘客突失去意识  美联合航空飞新加坡航班转降马尼拉",
-        "url": "https://www.zaobao.com.sg/realtime/singapore/story20260112-8087880"
-      },
-      {
-        "title": "伊朗指控美以介入国内抗议 称掌握证据并控制局势",
-        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8088095"
-      },
-      {
-        "title": "陈振英据报将任香港立法会“二把手”兼“班长”",
-        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8087688"
-      },
-      {
-        "title": "这家中国公司如何崛起为全球存储芯片巨头的挑战者",
-        "url": "https://cn.wsj.com/articles/the-chinese-company-taking-on-the-worlds-memory-chip-giants-ea6c72ff"
-      },
-      {
-        "title": "【国会】满足三保障措施 公共部门可与外部伙伴共享数据以更好服务公众",
-        "url": "https://www.zaobao.com.sg/realtime/singapore/story20260112-8087357"
-      },
-      {
-        "title": "中国外交部：北极涉国际社会利益 美国谋私利别拿中俄做借口",
-        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8087962"
-      },
-      {
-        "title": "韩国成立军警特别工作组 调查无人机事件",
-        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8087681"
-      },
-      {
-        "title": "韩国人均家庭贷款余额创新高 达8500新元",
-        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8087896"
-      },
-      {
-        "title": "中国工信部长：十五五时期聚焦人形机器人、6G领域",
-        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8087930"
-      },
-      {
-        "title": "農村居民沒錢取暖 中國「煤改氣」政策再掀討論",
-        "url": "https://www.dw.com/zh/農村居民沒錢取暖-中國「煤改氣」政策再掀討論/a-75469262"
-      },
-      {
-        "title": "加拿大总理卡尼星期三起访华",
-        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8087837"
-      },
-      {
-        "title": "北韩痛批美国「厚颜无耻」　滥用联合国平台",
-        "url": "https://www.rfi.fr/cn/%E5%9B%BD%E9%99%85%E6%8A%A5%E9%81%93/20260112-%E5%8C%97%E9%9F%A9%E7%97%9B%E6%89%B9%E7%BE%8E%E5%9B%BD-%E5%8E%9A%E9%A2%9C%E6%97%A0%E8%80%BB-%E6%BB%A5%E7%94%A8%E8%81%94%E5%90%88%E5%9B%BD%E5%B9%B3%E5%8F%B0"
-      },
-      {
-        "title": "马杜洛垮台石油业可望重启　提振民众经济期待",
-        "url": "https://www.rfi.fr/cn/%E5%9B%BD%E9%99%85%E6%8A%A5%E9%81%93/20260112-%E9%A9%AC%E6%9D%9C%E6%B4%9B%E5%9E%AE%E5%8F%B0%E7%9F%B3%E6%B2%B9%E4%B8%9A%E5%8F%AF%E6%9C%9B%E9%87%8D%E5%90%AF-%E6%8F%90%E6%8C%AF%E6%B0%91%E4%BC%97%E7%BB%8F%E6%B5%8E%E6%9C%9F%E5%BE%85"
-      },
-      {
-        "title": "被指突然加速与汽车相撞 电单车骑士抛飞12米",
-        "url": "https://www.zaobao.com.sg/realtime/singapore/story20260112-8087836"
-      },
-      {
-        "title": "缅甸亲军方政党官员称拿下原属翁山淑枝席位",
-        "url": "https://www.zaobao.com.sg/realtime/world/story20260112-8087559"
-      },
-      {
-        "title": "整治殡葬腐败乱象 中国严禁医疗卫生机构开展或外包殡仪服务",
-        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8087367"
-      },
-      {
-        "title": "女子马路上骑电动行李箱引热议",
-        "url": "https://www.zaobao.com.sg/realtime/singapore/story20260112-8087735"
-      },
-      {
-        "title": "霍启刚公开个人财产：持35项物业遍布港澳大陆",
-        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8087627"
-      },
-      {
-        "title": "反腐专题片预告海南省委原书记罗保铭出镜忏悔",
-        "url": "https://www.zaobao.com.sg/realtime/china/story20260112-8087565"
       }
     ]
   }
